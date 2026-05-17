@@ -1,0 +1,32 @@
+from rest_framework import serializers
+
+from battle.models_extended import Battle
+
+from monster.nested_serializers_extended import MonsterListRetrieveUpdateSerializer
+
+
+class BattleListSerializer(serializers.ModelSerializer):
+    monsterA = MonsterListRetrieveUpdateSerializer()
+    monsterB = MonsterListRetrieveUpdateSerializer()
+    winner = MonsterListRetrieveUpdateSerializer()
+
+    class Meta:
+        model = Battle
+        fields = "__all__"
+
+
+class BattleCreateSerializer(serializers.ModelSerializer):
+    monsterA = MonsterListRetrieveUpdateSerializer(write_only=True)
+    monsterB = MonsterListRetrieveUpdateSerializer(write_only=True)
+    winner = MonsterListRetrieveUpdateSerializer(read_only=True)
+
+    class Meta:
+        model = Battle
+        fields = "__all__"
+
+    def validate(self, attrs):
+        return attrs
+
+    def create(self, validated_data):
+        battle = Battle.objects.create(**validated_data)
+        return battle
