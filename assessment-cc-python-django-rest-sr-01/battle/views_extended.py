@@ -3,12 +3,10 @@ from django.http import Http404
 from rest_framework import mixins, viewsets
 from battle.models_extended import Battle
 from battle.serializers_extended import BattleListSerializer, BattleCreateSerializer
-from monster.models import Monster
-from battle.utils_extended import fight
 
 
 # Create your views here.
-class BattleListCreateView(mixins.ListModelMixin, viewsets.GenericViewSet):
+class BattleListCreateView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     A simple ViewSet for listing battles.
     """
@@ -24,13 +22,13 @@ class BattleListCreateView(mixins.ListModelMixin, viewsets.GenericViewSet):
         if self.action == "create":
             return self.serializer_create_class
         return self.serializer_class
-    
-    def create():
-        #TODO
-     raise NotImplementedError("The create function is not implemented yet.")
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super(BattleListCreateView, self).create(request, *args, **kwargs)
 
 
-class BattleRetrieveDeleteView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class BattleRetrieveDeleteView(mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     A simple ViewSet for update, retrieve and delete battles.
     """
@@ -49,6 +47,8 @@ class BattleRetrieveDeleteView(mixins.RetrieveModelMixin, viewsets.GenericViewSe
         except Http404:
             raise Battle.DoesNotExist
 
-    def destroy():
-        #TODO
-     raise NotImplementedError("The create function is not implemented yet.")
+    @transaction.atomic
+    def destroy(self, request, *args, **kwargs):
+        return super(BattleRetrieveDeleteView, self).destroy(
+            request, *args, **kwargs
+        )

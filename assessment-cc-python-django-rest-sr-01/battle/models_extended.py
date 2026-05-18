@@ -8,14 +8,12 @@ class Battle(models.Model):
     monsterA = models.PositiveSmallIntegerField(
         blank=False,
         verbose_name="Monster A",
-        related_name="battle_monster_a",
         validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
 
     monsterB = models.PositiveSmallIntegerField(
         blank=False,
         verbose_name="Monster B",
-        related_name="battle_monster_b",
         validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
 

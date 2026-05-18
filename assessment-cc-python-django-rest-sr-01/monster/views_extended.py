@@ -8,7 +8,7 @@ from monster.nested_serializers_extended import MonsterListRetrieveUpdateSeriali
 
 # Create your views here.
 
-class MonsterListCreateView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class MonsterListCreateView(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     A simple ViewSet for creating monsters.
     """
@@ -23,6 +23,5 @@ class MonsterListCreateView(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         return super(MonsterListCreateView, self).create(request, *args, **kwargs)
 
-    def list():
-        #TODO
-     raise NotImplementedError("The list function is not implemented yet.")
+    def list(self, request, *args, **kwargs):
+        return super(MonsterListCreateView, self).list(request, *args, **kwargs)
