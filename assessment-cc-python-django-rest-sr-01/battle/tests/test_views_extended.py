@@ -13,12 +13,12 @@ class BattleAPITestsExtended(BattleAPISetUp):
 
         response = self.client.post(
             "/battle/",
-            {"monsterA": monster_a, "monsterB": monster_b},
+            {"monsterA": monster_a.pk, "monsterB": monster_b.pk},
             format="json",
         )
 
         assert response.status_code == status.HTTP_201_CREATED
-        assert response.data["winner"] == monster_a
+        assert response.data["winner"] == monster_a.pk
 
     def test_battle_monster_b_wins_create(self):
         monster_a = Monster.objects.create(
@@ -33,12 +33,12 @@ class BattleAPITestsExtended(BattleAPISetUp):
 
         response = self.client.post(
             "/battle/",
-            {"monsterA": monster_a, "monsterB": monster_b},
+            {"monsterA": monster_a.pk, "monsterB": monster_b.pk},
             format="json",
         )
 
         assert response.status_code == status.HTTP_201_CREATED
-        assert response.data["winner"] == monster_b
+        assert response.data["winner"] == monster_b.pk
 
     def test_battle_invalid_monsters_dont_exist_create_return_not_found(self):
         response = self.client.post(
@@ -59,12 +59,7 @@ class BattleAPITestsExtended(BattleAPISetUp):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_battle_successful_destroy(self):
-        battle = Battle.objects.create(
-            monsterA=Monster.objects.create(name="Monster A", attack=10, speed=5, defense=5,hp=20),
-            monsterB=Monster.objects.create(name="Monster B", attack=5, speed=5, defense=5,hp=20),
-            winner=Monster.objects.create(name="Monster A", attack=10, speed=5, defense=5,hp=20)
-        )
-
+        battle = Battle.objects.create(monsterA=1, monsterB=2, winner=1)
         response = self.client.delete(f"/battle/{battle.pk}/")
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
