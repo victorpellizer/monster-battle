@@ -1,5 +1,4 @@
 from django.db import transaction
-from django.http import Http404
 from rest_framework import mixins, viewsets
 from battle.models_extended import Battle
 from battle.serializers_extended import BattleListSerializer, BattleCreateSerializer
@@ -40,12 +39,9 @@ class BattleRetrieveDeleteView(mixins.RetrieveModelMixin, mixins.DestroyModelMix
 
     @transaction.atomic
     def retrieve(self, request, *args, **kwargs):
-        try:
-            return super(BattleRetrieveDeleteView, self).retrieve(
-                request, *args, **kwargs
-            )
-        except Http404:
-            raise Battle.DoesNotExist
+        return super(BattleRetrieveDeleteView, self).retrieve(
+            request, *args, **kwargs
+        )
 
     @transaction.atomic
     def destroy(self, request, *args, **kwargs):

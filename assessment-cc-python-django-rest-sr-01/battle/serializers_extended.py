@@ -3,11 +3,12 @@ from rest_framework import serializers
 from monster.models import Monster
 from battle.models_extended import Battle
 from battle.utils_extended import fight
+from monster.nested_serializers_extended import MonsterListRetrieveUpdateSerializer
 
 class BattleListSerializer(serializers.ModelSerializer):
-    monsterA = serializers.PrimaryKeyRelatedField(read_only=True)
-    monsterB = serializers.PrimaryKeyRelatedField(read_only=True)
-    winner = serializers.PrimaryKeyRelatedField(read_only=True)
+    monsterA = MonsterListRetrieveUpdateSerializer()
+    monsterB = MonsterListRetrieveUpdateSerializer()
+    winner = MonsterListRetrieveUpdateSerializer()
 
     class Meta:
         model = Battle
